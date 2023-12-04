@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-	fmt.Println("AOC 2023 !")
 	totalSum := 0
 
 	file, err := os.Open("day1/input.txt")
