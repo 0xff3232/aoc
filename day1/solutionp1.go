@@ -12,7 +12,7 @@ import (
 func main() {
 	totalSum := 0
 
-	file, err := os.Open("day1/input.txt")
+	file, err := os.Open("day1/inputs/input.txt")
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}

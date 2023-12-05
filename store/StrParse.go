@@ -7,22 +7,20 @@ import (
     
 )
 
-// Data is a struct that holds a slice of strings, each representing a line from a file.
 type Data struct {
-	Lines []string
+	Lines []string // lines from input file stored in string array
 }
 
-// parse reads a file and returns a Data struct containing each line of the file.
+/*
+StrParse will take input file and parse string by \n into string array
+*/
 func StrParse(fileName string) (*Data, error) {
-    // os.ReadFile reads the entire file specified by fileName.
-    // If there's an error (like the file doesn't exist), it returns the error.
+    
     buf, err := os.ReadFile(fileName)
     if err != nil {
-        // Wraps the error with additional context and returns it.
         return nil, fmt.Errorf("read input file: %w", err)
     }
 
-    // Create a new Data struct.
     d := &Data{}
 
     // Split the content of the file into lines.
@@ -40,6 +38,5 @@ func StrParse(fileName string) (*Data, error) {
         d.Lines = append(d.Lines, line)
     }
 
-    // Return the pointer to the Data struct and nil (no error).
     return d, nil
 }
