@@ -1,67 +1,75 @@
 package main
 
 import (
-	"bufio"
+
 	"fmt"
-	"log"
-	"os"
-	"strconv"
-	"unicode"
+	"github.com/0xff3232/aoc"
 )
+
 
 func main() {
 	fmt.Println("AOC 2023 !")
-	totalSum := 0
+	d, err := store.StrParse("day1/p2input.txt")
 
-	file, err := os.Open("day1/input.txt")
 	if err != nil {
-		log.Fatalf("error opening file: %v", err)
+		fmt.Errorf("parse: %w", err)
 	}
-	defer file.Close()
+	
+	part2Tokens := map[string]int{
+		"one":   1,
+		"two":   2,
+		"three": 3,
+		"four":  4,
+		"five":  5,
+		"six":   6,
+		"seven": 7,
+		"eight": 8,
+		"nine":  9,
+		"1":     1,
+		"2":     2,
+		"3":     3,
+		"4":     4,
+		"5":     5,
+		"6":     6,
+		"7":     7,
+		"8":     8,
+		"9":     9,
+	}
+	_ = part2Tokens
 
-	scanner := bufio.NewScanner(file)
+	tokens := part2Tokens
 
-	for scanner.Scan() {
-		str := scanner.Text()
-
-		left, right := 0, len(str) - 1
-		firstDigit, lastDigit := "", ""
-
-		// Find the first digit
-		for left <= right {
-			if unicode.IsDigit(rune(str[left])) {
-				firstDigit = string(str[left])
-				break
+	total := 0
+	for _, line := range d.Lines {
+		var left, right int
+	subloop:
+		for i := 0; i < len(line); i++ {
+			for tok, n := range tokens {
+				if i+len(tok) > len(line) {
+					continue
+				}
+				if line[i:i+len(tok)] == tok {
+					left = n
+					break subloop
+				}
 			}
-			left++
 		}
 
-		// Find the last digit
-		for right >= left {
-			if unicode.IsDigit(rune(str[right])) {
-				lastDigit = string(str[right])
-				break
+	subloop2:
+		for i := len(line) - 1; i >= 0; i-- {
+			for tok, n := range tokens {
+				if i-len(tok)+1 < 0 {
+					continue
+				}
+				if line[i-len(tok)+1:i+1] == tok {
+					right = n
+					break subloop2
+				}
 			}
-			right--
 		}
-
-		if firstDigit == "" || lastDigit == "" {
-			fmt.Println("No valid digits found in the string.")
-			continue
-		}
-
-		// Concatenate the digits and convert to number
-		concatenatedDigits, err := strconv.Atoi(firstDigit + lastDigit)
-		if err != nil {
-			log.Fatalf("error converting concatenated digits to number: %v", err)
-		}
-
-		totalSum += concatenatedDigits
+		total += left*10 + right
 	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatalf("error reading file: %v", err)
-	}
-
-	fmt.Println("Total sum is:", totalSum)
+	fmt.Printf("total should be: 55291 total is: %d\n", total)
 }
+
+
